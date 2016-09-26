@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\getopt.c" />
+    <ClCompile Include="..\..\src\jfif.cpp" />
+    <ClCompile Include="..\..\src\jfif_gtk.c" />
+    <ClCompile Include="..\..\src\jfif_idct.cpp" />
+    <ClCompile Include="..\..\src\jfif_main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\bitmap.h" />
+    <ClInclude Include="..\..\src\jfif.h" />
+    <ClInclude Include="..\..\src\jfif_class.h" />
+    <ClInclude Include="..\..\src\jfif_encode.h" />
+    <ClInclude Include="..\..\src\jfif_gtk.h" />
+    <ClInclude Include="..\..\src\jfif_idct.h" />
+    <ClInclude Include="..\..\src\jfif_local.h" />
+    <ClInclude Include="..\..\src\jpeg_dct_cos.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{50AC1509-93DE-4091-A8E8-89F0577F9837}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>jpeg</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>jfif</TargetName>
+    <IncludePath>$(GTKLIB)\include;$(GTKDIR)\lib\glib-2.0\include;$(GTKDIR)\lib\gtk-2.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(GTKDIR)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>jfif</TargetName>
+    <IncludePath>$(GTKDIR)\lib\gtk-2.0\include;$(GTKDIR)\lib\glib-2.0\include;$(GTKLIB)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(GTKLIB)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level2</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;JPEG_DEBUG_MODE;JPEG_FAST_INT_IDCT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <AdditionalOptions>-IC:/Tools/gtk+/include/gtk-2.0 -IC:/Tools/gtk+/lib/gtk-2.0/include -IC:/Tools/gtk+/include/atk-1.0 -IC:/Tools/gtk+/include/cairo -IC:/Tools/gtk+/include/gdk-pixbuf-2.0 -IC:/Tools/gtk+/include/pango-1.0 -IC:/Tools/gtk+/include/glib-2.0 -IC:/Tools/gtk+/lib/glib-2.0/include -IC:/Tools/gtk+/include -IC:/Tools/gtk+/include/freetype2 -IC:/Tools/gtk+/include/libpng14  %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalOptions>/libpath:C:/Tools/gtk+/lib gtk-win32-2.0.lib gdk-win32-2.0.lib atk-1.0.lib gio-2.0.lib pangowin32-1.0.lib gdi32.lib pangocairo-1.0.lib gdk_pixbuf-2.0.lib pango-1.0.lib cairo.lib gobject-2.0.lib gmodule-2.0.lib gthread-2.0.lib glib-2.0.lib intl.lib  %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;JPEG_FAST_INT_IDCT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>-IC:/Tools/gtk+/include/gtk-2.0 -IC:/Tools/gtk+/lib/gtk-2.0/include -IC:/Tools/gtk+/include/atk-1.0 -IC:/Tools/gtk+/include/cairo -IC:/Tools/gtk+/include/gdk-pixbuf-2.0 -IC:/Tools/gtk+/include/pango-1.0 -IC:/Tools/gtk+/include/glib-2.0 -IC:/Tools/gtk+/lib/glib-2.0/include -IC:/Tools/gtk+/include -IC:/Tools/gtk+/include/freetype2 -IC:/Tools/gtk+/include/libpng14  %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalOptions>/libpath:C:/Tools/gtk+/lib gtk-win32-2.0.lib gdk-win32-2.0.lib atk-1.0.lib gio-2.0.lib pangowin32-1.0.lib gdi32.lib pangocairo-1.0.lib gdk_pixbuf-2.0.lib pango-1.0.lib cairo.lib gobject-2.0.lib gmodule-2.0.lib gthread-2.0.lib glib-2.0.lib intl.lib  %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
