@@ -9,13 +9,13 @@ JFIF is a JFIF and JPEG file decoder, converting these compressed file types to 
 
 The following is applicable to Windows 10, but is easily adapted for other versions of windows.
 
-Clone the github repository to you chosen location. A pre-built executable (jfif.exe), built from MSVC, is in the top level folder. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run. Try the following link:
+Clone the github repository to you chosen location. A pre-built executable (<tt>jfif.exe</tt>), built from MSVC, is in the top level folder. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run. Try the following link:
 
     https://download.gnome.org/binaries/win64/gtk+/2.22/gtk%2B-bundle_2.22.0-20101016_win64.zip
 
 ## On Linux
 
-Clone the github repository to you chosen location. A pre-bult executable (jfif) is in the top level directory. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run:
+Clone the github repository to you chosen location. A pre-bult executable (<tt>jfif</tt>) is in the top level directory. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run:
 
     sudo apt-get install gtk2.0
 
@@ -33,7 +33,7 @@ The full usage for the program is:
         -i define input filename (default test.jpg)
         -o define output filename (default test.bmp)
 
-JFIF is simple to use. Just typing "jfif" (or jfif.exe) will result in a file test.jpg being decoded (if exists), and a bitmap output test.bmp be written. The -i and -o options are used to alter the default input and output filenames. The resultant bitmap can also be optionally displayed in a popup window, scaled to a maximum display area of 800x600, for validating the conversion by eye, using the -d option. This is generated from the actual bitmap file rather than internal memory to guarantee no additional artifacts in bitmap generation are missed in the display. This delays the display of the file a fraction, but in the interests model integrity.
+JFIF is simple to use. Just typing "<tt>jfif</tt>" (or <tt>jfif.exe</tt>) will result in a file <tt>test.jpg</tt> being decoded (if exists), and a bitmap output test.bmp be written. The <tt>-i</tt> and <tt>-o</tt> options are used to alter the default input and output filenames. The resultant bitmap can also be optionally displayed in a popup window, scaled to a maximum display area of 800x600, for validating the conversion by eye, using the <tt>-d</tt> option. This is generated from the actual bitmap file rather than internal memory to guarantee no additional artifacts in bitmap generation are missed in the display. This delays the display of the file a fraction, but in the interests model integrity.
 
 ## Compiling
 
@@ -41,17 +41,17 @@ If you wish to recompile the source code under MinGW or Linux, using the makefil
 
     make [SLOWIDCT=no]
 
-Note that the option "SLOWIDCT=no" is only available if the jfif_idct.[ch] files are available. The generated executable will be output to the build folder.
+Note that the option <tt>SLOWIDCT=no</tt> is only available if the <tt>jfif_idct.[ch]</tt> files are available. The generated executable will be output to the build folder.
 
-If the bundle was unzipped into C:\Tools\gtk+ then the makefile will automatically pick this up if wishing to compile. Otherwise you can use 
+If the bundle was unzipped into <tt>C:\Tools\gtk+</tt> then the <tt>makefile will</tt> automatically pick this up if wishing to compile. Otherwise you can use 
 
     make -DGTKBINDIR=<path to your gtk+ bin>
     
 or update the variable in the makefile itself. Modify your PATH to include c:\Tools\gtk+\bin (or to wherever you installed the package).
 
-For Microsoft Visual Studio (MSVC) 2019, a solution file (msvc/jpeg.sln) and associated files, are available for compilation, which works with the community version, as well as he subscriptions editions.
+For Microsoft Visual Studio (MSVC) 2019, a solution file (<tt>msvc/jpeg.sln</tt>) and associated files, are available for compilation, which works with the community version, as well as he subscriptions editions.
 
-Note that, to compile under MSVC or MinGW, GTK+ (including headers) must be installed (at C:\Tools\gtk+). If this is not the case, then JPEG_NO_GRAPHICS must be defined as a Preprocessor definition, and the '-d' option will not be available. 
+Note that, to compile under MSVC or MinGW, GTK+ (including headers) must be installed (at <tt>C:\Tools\gtk+</tt>). If this is not the case, then <tt>JPEG_NO_GRAPHICS</tt> must be defined as a Preprocessor definition, and the <tt>-d</tt> option will not be available. 
 
 Any of the executables generated under MinGW will still run in a native Windows  environment (i.e. a command prompt window), so long as the runtime libraries are available and in the user's path.
 
@@ -69,7 +69,7 @@ The full JPEG standard is broad in it's scope, with alternatives and enhancing f
 * Vertical sub-sampling factor (Vi) > 2
 
 For more information see:
-    http://www.anita-simulators.org.uk/wyvernsemi/jpeg/jfif_sw.htm.
+    http://www.anita-simulators.org.uk/wyvernsemi/jpeg/jfif_sw.htm
 
 Simon Southwell
 simon@anita-simulators.org.uk
