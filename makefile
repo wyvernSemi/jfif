@@ -18,103 +18,107 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with JFIF. If not, see <http://www.gnu.org/licenses/>.
-#
-# $Id: makefile,v 1.3 2016-09-26 06:35:08 simon Exp $
-# $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/makefile,v $
 # 
 ##############################################################
 # Makefile for jfif, for both linux and MinGW/Cygwin (Windows)
 #
 # Options:
 #
-# SLOWIDCT=yes|no	Compile with slow integer algorithm (default no)
-# FLOATIDCT=yes|no	Compile slow algorithm with floating point (SLOWIDCT=yes only, default no)
-# DEBUGMODE=yes|no	Include debug features (default no)
+# SLOWIDCT=yes|no     Compile with slow integer algorithm (default no)
+# FLOATIDCT=yes|no    Compile slow algorithm with floating point (SLOWIDCT=yes only, default no)
+# DEBUGMODE=yes|no    Include debug features (default no)
 #
 ##############################################################
 
 # By default, compiling for fast iDCT. Use "make SLOWIDCT=yes"
 # if slow idct (optionally floating point) required
 
-SLOWIDCT        = no
+SLOWIDCT           = no
 
 # Set FLOATIDCT=yes for floating point iDCT (ignored when SLOWIDCT=no)
 
-FLOATIDCT       = no
+FLOATIDCT          = no
 
 # Set DEBUGMODE=yes for compilation with debug featured (adds -D option)
 
-DEBUGMODE       = no
+DEBUGMODE          = no
 
-OBJSFX  	= o
-BUILDDIR	= build
-SRCDIR          = src
+OBJSFX             = o
+BUILDDIR           = ./build
+SRCDIR             = ./src
+
+OSTYPE:=$(shell uname -s)
+
+ifeq (${OSTYPE},Linux)
+  GTKBINDIR        = /usr/bin
+else
+  GTKBINDIR        = C:/Tools/gtk+/bin
+endif
 
 # Targets to build
 
-EXETARGET  	= ${BUILDDIR}/jfif
-LIBTARGET  	= ${BUILDDIR}/libjfif.a
+EXETARGET          = ${BUILDDIR}/jfif
+LIBTARGET          = ${BUILDDIR}/libjfif.a
 
 # All the include files
 
-INCLFILES 	= ${SRCDIR}/jfif.h 		\
-                  ${SRCDIR}/jfif_idct.h 	\
-                  ${SRCDIR}/jfif_class.h 	\
-                  ${SRCDIR}/jfif_local.h 	\
-                  ${SRCDIR}/jfif_gtk.h 		\
-		  ${SRCDIR}/bitmap.h     	\
-		  ${SRCDIR}/jpeg_dct_cos.h
+INCLFILES          = ${SRCDIR}/jfif.h            \
+                     ${SRCDIR}/jfif_idct.h       \
+                     ${SRCDIR}/jfif_class.h      \
+                     ${SRCDIR}/jfif_local.h      \
+                     ${SRCDIR}/jfif_gtk.h        \
+                     ${SRCDIR}/bitmap.h          \
+                     ${SRCDIR}/jpeg_dct_cos.h
 
 # Define some compile variables based on the SLOWIDCT and FLOATIDCT settings
 
 ifeq (${SLOWIDCT}, no)
   ifeq (${FLOATIDCT}, no)
-    IDCTCFLAG     = -DJPEG_FAST_INT_IDCT
+    IDCTCFLAG      = -DJPEG_FAST_INT_IDCT
   else
-    IDCTCFLAG     = 
+    IDCTCFLAG      = 
   endif
 else
-  IDCTCFLAG     = -DJPEG_DCT_INTEGER
+  IDCTCFLAG        = -DJPEG_DCT_INTEGER
 endif
 
 # All the object files
-OBJMAIN         = obj/jfif_main.${OBJSFX}
-OBJFILES  	= obj/jfif.${OBJSFX}     	\
-                  obj/jfif_gtk.${OBJSFX} 	\
-		  obj/jfif_idct.${OBJSFX}
+OBJMAIN            = obj/jfif_main.${OBJSFX}
+OBJFILES           = obj/jfif.${OBJSFX}          \
+                     obj/jfif_gtk.${OBJSFX}      \
+                     obj/jfif_idct.${OBJSFX}
 
 # Select if to compile with verbose debug output, based on DEBUGMODE,
 # which adds the "-D<debug mask> option"
 
 ifeq (${DEBUGMODE}, no)
-  DEFDEBUG	= 
+  DEFDEBUG         = 
 else
-  DEFDEBUG	= -DJPEG_DEBUG_MODE
+  DEFDEBUG         = -DJPEG_DEBUG_MODE
 endif
 
 # Swap over (or override on the cmd line) for debug symbol compilation
-#COMMOPTS	= -g 
-COMMOPTS	= -ffast-math -finline-functions -funroll-loops -O4
+#COMMOPTS    = -g 
+COMMOPTS           = -ffast-math -finline-functions -funroll-loops -O4
 
 # Use the GNU compiler
 
-CC      	= gcc
-CPP     	= g++
+CC                 = gcc
+CPP                = g++
 
 # Default pre-processor definitions
 
-DEFINES 	= ${IDCTCFLAG}                  \
-		  ${DEFDEBUG}
+DEFINES            = ${IDCTCFLAG}                \
+                     ${DEFDEBUG}
 
 # C compilation flags
-
-CFLAGS  	= ${COMMOPTS} -I${SRCDIR} ${DEFINES} `pkg-config --cflags gtk+-2.0`
+CFLAGS             = ${COMMOPTS} -I${SRCDIR} ${DEFINES} $(shell ${GTKBINDIR}/pkg-config --cflags gtk+-2.0)
 
 # In MinGW/Cygwin, the pkg-config command *must* be the last on the line, 
 # (more specifically, the ` characters) so the link rule must reflect this.
 
-LDFLAGS 	= `pkg-config --libs gtk+-2.0`
-LDLIBS	 	= 
+LDFLAGS            = $(shell ${GTKBINDIR}/pkg-config --libs gtk+-2.0)
+LDLIBS             = 
 
 ##########################################################
 # Dependency definitions
@@ -156,5 +160,5 @@ obj/%.${OBJSFX} : ${SRCDIR}/%.cpp ${INCLFILES} makefile
 
 .PHONY : clean
 clean:
-	@rm -f ${EXETARGET} ${LIBTARGET} obj/*.${OBJSFX}
+	@rm -f ${EXETARGET} ${EXETARGET}.exe ${LIBTARGET} obj/*.${OBJSFX}
 

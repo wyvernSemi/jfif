@@ -13,49 +13,39 @@ Usage: jfif [-h] [-d] [-i <filename>] [-o <filename>]
     -d display generated bitmap file's image in a window
     -i define input filename (default test.jpg)
     -o define output filename (default test.bmp)
+    -D specify debug enable value (default off)
 
 INSTALL
 -------
 
-For Cygwin on Windows
-+++++++++++++++++++++
+On Windows
+..........
 
-The following is applicable to Windows 7, but is easily adapted for
-previous versions of windows.
+The following is applicable to Windows 10, but is easily adapted for
+other versions of windows.
 
-Run the setup_jfif.exe executable and extract the files to your chosen
-location (the default is c:\Program Files (x86)\jfif). Then, if you
-don't already have GTK+ 2.0 installed, modify your PATH environment variable as 
-described below:
+Clone the github repository to you chosen location. A pre-built executable
+(jfif.exe), built from MSVC, is in the top level folder. If you don't already
+have GTK+ 2.0 installed, then this needs to be done before the executable will
+run. Try the following link:
 
-1. Right Clock on the 'My Computer' icon on your desktop
-   and select 'Properties'
+    https://download.gnome.org/binaries/win64/gtk+/2.22/gtk%2B-bundle_2.22.0-20101016_win64.zip
 
-2. Click on 'Advanced System Settings'
 
-3. Click on 'Environment Variables...'
+On Linux
+........
 
-4. In the 'System variables' window, locate and select the variable 'Path',
-   and click on 'Edit...'
+Clone the github repository to you chosen location. A pre-bult executable
+(jfif) is in the top level directory. If you don't already have GTK+ 2.0
+installed, then this needs to be done before the executable will run:
 
-5. Append to the end of the existing value. e.g.:
+    sudo apt-get install gtk2.0
 
-   <EXISTING Path value>;C:\Program Files (x86)\jfif\build
-
-   (substitute your install location if not C:\Program Files (x86)\jfif.) Note
-   the semi-colon as the first character to add, to delineate from the
-   previous value(s).
-
-6. Click 'OK', and for the previous two opened windows, and then close
-   the properties window.
 
 RUNNING
 -------
 
-Under windows, JFIF can be run from the DOS cmd shell (cmd.exe), which is 
-located in C:\Windows\system32, or run from the start menu (look in Accessories
-for 'Command Prompt'). Under Linux/Un*x, the program is run from a terminal, 
-such as xterm. E.g.:
+Under windows, JFIF can be run from a windows command prompt window. E.g.
 
   jfif -d -i test.jpg
 
@@ -63,27 +53,38 @@ such as xterm. E.g.:
 COMPILING
 ---------
 
-If you wish to recompile the source code under Cygwin, Linux or UN*X,
-then use the following command:
+If you wish to recompile the source code under MinGW or Linux, using the
+makefile, then use the following command:
 
   make [SLOWIDCT=no]
 
 Note that the option "SLOWIDCT=no" is only available if the jfif_idct.[ch]
-files are available.
+files are available. The generated executable will be output to the build
+folder.
 
-For windows MSCV 2010, a solution file (msvc/jfif.sln) and associated files are 
-available for compiling under Microsoft Visual Studio 2010, which works with 
-the free Express version, as well as he subscriptions editions.
+If the bundle was unzipped into C:\Tools\gtk+ then the makefile will auto-
+matically pick this up if wishing to compile. Otherwise you can use 
 
-Note that to compile under MSVC GTK+ (including headers) must be installed 
-(at C:\Tool\gtk+). If this is not the case, then JPEG_NO_GRAPHICS must be 
-defined as a Preprocessor defintion, and the '-d' option will not be available. 
+    make -DGTKBINDIR=<path to your gtk+ bin>
+    
+or update the variable in the makefile itself. Modify your PATH to include 
+c:\Tools\gtk+\bin (or to wherever you installed the package).
 
-Any of the executables generated under Cygwin will still run in a native Windows 
-environment (i.e. a command prompt window), so long as the runtime libraries are
-available, and in the user's path.
+For Microsoft Visual Studio (MSVC) 2019, a solution file (msvc/jpeg.sln) and
+associated files, are available for compilation, which works with the community
+version, as well as he subscriptions editions.
 
-For more information see http://www.anita-simulators.org.uk/wyvernsemi/jpeg/jfif_sw.htm.
+Note that, to compile under MSVC or MinGW, GTK+ (including headers) must be
+installed (at C:\Tools\gtk+). If this is not the case, then JPEG_NO_GRAPHICS
+must be defined as a Preprocessor definition, and the '-d' option will not be
+available. 
+
+Any of the executables generated under MinGW will still run in a native Windows 
+environment (i.e. a command prompt window), so long as the runtime libraries
+are available and in the user's path.
+
+For more information see:
+    http://www.anita-simulators.org.uk/wyvernsemi/jpeg/jfif_sw.htm.
 
 Simon Southwell
 simon@anita-simulators.org.uk
