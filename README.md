@@ -3,17 +3,17 @@
 
 JFIF is a JFIF and JPEG file decoder, converting these compressed file types to uncompressed 24 bit windows bitmaps. The resultant bitmap can also be optionally displayed in a popup window, scaled to a maximum display area of 800x600, for validating the conversion.
 
-# INSTALL
+## INSTALL
 
-## On Windows
+### On Windows
 
 The following is applicable to Windows 10, but is easily adapted for other versions of windows.
 
-Clone the github repository to you chosen location. A pre-built executable (<tt>jfif.exe</tt>), built from MSVC, is in the top level folder. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run. Try the following link:
+Clone the github repository to you chosen location. A pre-built executable, <tt>jfif.exe</tt>, built from MSVC, is in the top level folder. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run. Try the following link:
 
     https://download.gnome.org/binaries/win64/gtk+/2.22/gtk%2B-bundle_2.22.0-20101016_win64.zip
 
-## On Linux
+### On Linux
 
 Clone the github repository to you chosen location. A pre-bult executable (<tt>jfif</tt>) is in the top level directory. If you don't already have GTK+ 2.0 installed, then this needs to be done before the executable will run:
 
@@ -33,7 +33,7 @@ The full usage for the program is:
         -i define input filename (default test.jpg)
         -o define output filename (default test.bmp)
 
-JFIF is simple to use. Just typing "<tt>jfif</tt>" (or <tt>jfif.exe</tt>) will result in a file <tt>test.jpg</tt> being decoded (if exists), and a bitmap output test.bmp be written. The <tt>-i</tt> and <tt>-o</tt> options are used to alter the default input and output filenames. The resultant bitmap can also be optionally displayed in a popup window, scaled to a maximum display area of 800x600, for validating the conversion by eye, using the <tt>-d</tt> option. This is generated from the actual bitmap file rather than internal memory to guarantee no additional artifacts in bitmap generation are missed in the display. This delays the display of the file a fraction, but in the interests model integrity.
+JFIF is simple to use. Just typing <tt>jfif</tt> (or <tt>jfif.exe</tt>) will result in a file <tt>test.jpg</tt> being decoded (if exists), and a bitmap output test.bmp be written. The <tt>-i</tt> and <tt>-o</tt> options are used to alter the default input and output filenames. The resultant bitmap can also be optionally displayed in a popup window, scaled to a maximum display area of 800x600, for validating the conversion by eye, using the <tt>-d</tt> option. This is generated from the actual bitmap file rather than internal memory to guarantee no additional artifacts in bitmap generation are missed in the display. This delays the display of the file a fraction, but in the interests model integrity.
 
 ## Compiling
 
@@ -43,7 +43,7 @@ If you wish to recompile the source code under MinGW or Linux, using the makefil
 
 Note that the option <tt>SLOWIDCT=no</tt> is only available if the <tt>jfif_idct.[ch]</tt> files are available. The generated executable will be output to the build folder.
 
-If the bundle was unzipped into <tt>C:\Tools\gtk+</tt> then the <tt>makefile will</tt> automatically pick this up if wishing to compile. Otherwise you can use 
+If the bundle was unzipped into <tt>C:\Tools\gtk+</tt> then the <tt>makefile</tt> will automatically pick this up if wishing to compile. Otherwise you can use 
 
     make -DGTKBINDIR=<path to your gtk+ bin>
     
