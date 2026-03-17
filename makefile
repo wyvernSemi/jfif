@@ -47,33 +47,25 @@ OBJSFX             = o
 BUILDDIR           = ./build
 SRCDIR             = ./src
 
-OSTYPE:=$(shell uname -s)
-
-ifeq (${OSTYPE},Linux)
-  GTKBINDIR        = /usr/bin
-else
-  GTKBINDIR        = C:/Tools/gtk+/bin
-endif
-
 # Targets to build
 
-EXETARGET          = ${BUILDDIR}/jfif
-LIBTARGET          = ${BUILDDIR}/libjfif.a
+EXETARGET          = $(BUILDDIR)/jfif
+LIBTARGET          = $(BUILDDIR)/libjfif.a
 
 # All the include files
 
-INCLFILES          = ${SRCDIR}/jfif.h            \
-                     ${SRCDIR}/jfif_idct.h       \
-                     ${SRCDIR}/jfif_class.h      \
-                     ${SRCDIR}/jfif_local.h      \
-                     ${SRCDIR}/jfif_gtk.h        \
-                     ${SRCDIR}/bitmap.h          \
-                     ${SRCDIR}/jpeg_dct_cos.h
+INCLFILES          = $(SRCDIR)/jfif.h            \
+                     $(SRCDIR)/jfif_idct.h       \
+                     $(SRCDIR)/jfif_class.h      \
+                     $(SRCDIR)/jfif_local.h      \
+                     $(SRCDIR)/jfif_gtk.h        \
+                     $(SRCDIR)/bitmap.h          \
+                     $(SRCDIR)/jpeg_dct_cos.h
 
 # Define some compile variables based on the SLOWIDCT and FLOATIDCT settings
 
-ifeq (${SLOWIDCT}, no)
-  ifeq (${FLOATIDCT}, no)
+ifeq ($(SLOWIDCT), no)
+  ifeq ($(FLOATIDCT), no)
     IDCTCFLAG      = -DJPEG_FAST_INT_IDCT
   else
     IDCTCFLAG      = 
@@ -83,15 +75,15 @@ else
 endif
 
 # All the object files
-OBJMAIN            = obj/jfif_main.${OBJSFX}
-OBJFILES           = obj/jfif.${OBJSFX}          \
-                     obj/jfif_gtk.${OBJSFX}      \
-                     obj/jfif_idct.${OBJSFX}
+OBJMAIN            = obj/jfif_main.$(OBJSFX)
+OBJFILES           = obj/jfif.$(OBJSFX)          \
+                     obj/jfif_gtk.$(OBJSFX)      \
+                     obj/jfif_idct.$(OBJSFX)
 
 # Select if to compile with verbose debug output, based on DEBUGMODE,
 # which adds the "-D<debug mask> option"
 
-ifeq (${DEBUGMODE}, no)
+ifeq ($(DEBUGMODE), no)
   DEFDEBUG         = 
 else
   DEFDEBUG         = -DJPEG_DEBUG_MODE
@@ -108,37 +100,37 @@ CPP                = g++
 
 # Default pre-processor definitions
 
-DEFINES            = ${IDCTCFLAG}                \
-                     ${DEFDEBUG}
+DEFINES            = $(IDCTCFLAG)                \
+                     $(DEFDEBUG)
 
 # C compilation flags
-CFLAGS             = ${COMMOPTS} -I${SRCDIR} ${DEFINES} $(shell ${GTKBINDIR}/pkg-config --cflags gtk+-2.0)
+CFLAGS             = $(COMMOPTS) -I$(SRCDIR) $(DEFINES) $(shell pkg-config --cflags gtk+-3.0)
 
 # In MinGW/Cygwin, the pkg-config command *must* be the last on the line, 
 # (more specifically, the ` characters) so the link rule must reflect this.
 
-LDFLAGS            = $(shell ${GTKBINDIR}/pkg-config --libs gtk+-2.0)
+LDFLAGS            = $(shell pkg-config --libs gtk+-3.0)
 LDLIBS             = 
 
 ##########################################################
 # Dependency definitions
 ##########################################################
 
-all: ${EXETARGET} ${LIBTARGET}
+all: $(EXETARGET) $(LIBTARGET)
 
 ##########################################################
 # Linking rules
 ##########################################################
 #
-# Remember: don't move ${LDFLAGS} from being last, for 
+# Remember: don't move $(LDFLAGS) from being last, for 
 # MinGW/Cygwin
 #
 
-${EXETARGET}: ${OBJMAIN} ${OBJFILES} makefile
-	@${CPP} ${OBJMAIN} ${OBJFILES} -o $@ ${LDLIBS} ${LDFLAGS}
+$(EXETARGET): $(OBJMAIN) $(OBJFILES) makefile
+	@$(CPP) $(OBJMAIN) $(OBJFILES) -o $@ $(LDLIBS) $(LDFLAGS)
 
-${LIBTARGET}: ${OBJFILES} makefile
-	@ar -c -r $@ ${OBJFILES}
+$(LIBTARGET): $(OBJFILES) makefile
+	@ar -c -r $@ $(OBJFILES)
 
 ##########################################################
 # Compilation rules
@@ -148,11 +140,11 @@ ${LIBTARGET}: ${OBJFILES} makefile
 # Dependencies not optimal for includes, but
 # a generic and concise rule instead.
 #
-obj/%.${OBJSFX} : ${SRCDIR}/%.c ${INCLFILES} makefile
-	@${CC} -c $< -o $@ ${CFLAGS}
+obj/%.$(OBJSFX) : $(SRCDIR)/%.c $(INCLFILES) makefile
+	@$(CC) -c $< -o $@ $(CFLAGS)
 
-obj/%.${OBJSFX} : ${SRCDIR}/%.cpp ${INCLFILES} makefile
-	@${CPP} -c $< -o $@ ${CFLAGS}
+obj/%.$(OBJSFX) : $(SRCDIR)/%.cpp $(INCLFILES) makefile
+	@$(CPP) -c $< -o $@ $(CFLAGS)
 
 ##########################################################
 # Clean up rules
@@ -160,5 +152,5 @@ obj/%.${OBJSFX} : ${SRCDIR}/%.cpp ${INCLFILES} makefile
 
 .PHONY : clean
 clean:
-	@rm -f ${EXETARGET} ${EXETARGET}.exe ${LIBTARGET} obj/*.${OBJSFX}
+	@rm -f $(EXETARGET) $(EXETARGET).exe $(LIBTARGET) obj/*.$(OBJSFX)
 

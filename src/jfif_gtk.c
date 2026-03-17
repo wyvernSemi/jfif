@@ -1,6 +1,6 @@
 //=============================================================
 // 
-// Copyright (c) 2010-2014 Simon Southwell
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 18th January 2010
@@ -19,9 +19,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
-//
-// $Id: jfif_gtk.c,v 1.1 2014-03-01 15:51:37 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jfif_gtk.c,v $
 //
 //=============================================================
 
@@ -48,7 +45,7 @@ static GdkPixbuf *pxbuf;
 // Callback function invoked on drawable area exposed to paint
 // the pixmap
 //
-static gboolean jpeg_on_drawarea_expose (GtkWidget *widget, GdkEventExpose *event, gpointer user_data)
+static gboolean jpeg_on_drawarea_expose (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
 
     int dest_x=BORDER_WIDTH, dest_y = BORDER_WIDTH;
@@ -66,27 +63,20 @@ static gboolean jpeg_on_drawarea_expose (GtkWidget *widget, GdkEventExpose *even
 
 
     // If scaled dimension less than window, centre in the window
-    if (scale_width < display_width) 
+    if (scale_width < display_width)
+    {
         dest_x += (display_width-scale_width)/2;
+    }
 
-    if (scale_height < display_height) 
+    if (scale_height < display_height)
+    {
         dest_y += (display_height-scale_height)/2;
+    }
 
-    // Draw the pixbuf
-    gdk_draw_pixbuf (widget->window,
-                     widget->style->fg_gc[GTK_STATE_NORMAL],
-                     pxbuf, 
-                     0, 
-                     0,
-                     dest_x, 
-                     dest_y, 
-                     -1, 
-                     -1, 
-                     GDK_RGB_DITHER_MAX, 
-                     0, 
-                     0);
+    gdk_cairo_set_source_pixbuf(cr, pxbuf, dest_x, dest_y);
+    cairo_paint(cr);
 
-    return TRUE;
+    return true;
 }
 
 //-------------------------------------------------------------
@@ -94,12 +84,12 @@ static gboolean jpeg_on_drawarea_expose (GtkWidget *widget, GdkEventExpose *even
 //
 // Description:
 //
-// Callback function called on a delte event
+// Callback function called on a delete event
 //
 static gboolean jpeg_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     // Tell engine we want a destroy event
-    return FALSE;
+    return false;
 }
 
 //-------------------------------------------------------------
@@ -142,7 +132,7 @@ void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X,
     int draw_height, draw_width;
 
     GError *gtk_error=NULL;
-    GdkColor colour;
+    GdkRGBA colour;
 
     // Export the arguments for callback visibility
     image_width  = X;
@@ -150,18 +140,25 @@ void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X,
 
     // If image is smaller than the maximum window, resize the display around the image dimensions
     // (but only to a minimum)
-    if ((image_width < MAX_DISPLAY_WIDTH) && (image_height < MAX_DISPLAY_HEIGHT)) {
+    if ((image_width < MAX_DISPLAY_WIDTH) && (image_height < MAX_DISPLAY_HEIGHT))
+    {
         display_width  = (image_width  > MIN_DISPLAY_WIDTH)  ? image_width  : MIN_DISPLAY_WIDTH;
         display_height = (image_height > MIN_DISPLAY_HEIGHT) ? image_height : MIN_DISPLAY_HEIGHT;
 
     // If image is to be scaled, then adjust the display window to be the same aspect ratio
-    } else {
+    }
+    else
+    {
         // Landscape
-        if (((float)image_width/(float)image_height) < ((float)MAX_DISPLAY_WIDTH/(float)MAX_DISPLAY_HEIGHT)) 
+        if (((float)image_width/(float)image_height) < ((float)MAX_DISPLAY_WIDTH/(float)MAX_DISPLAY_HEIGHT))
+        {
             display_width = (int)((float)MAX_DISPLAY_HEIGHT*((float)image_width/(float)image_height));
+        }
         // Portrait
         else
+        {
             display_height = (int)((float)MAX_DISPLAY_WIDTH/((float)image_width/(float)image_height));
+        }
     }
 
     // If image dimensions are less than the display, use the image dimension for the pixmap scaling
@@ -175,32 +172,39 @@ void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X,
     // Get a window
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    // Get an area to draw in, and set the size
-    drawarea = gtk_drawing_area_new ();
+    // Get a drawable area
+    drawarea = gtk_drawing_area_new();
+
+    // Set the size of the drawable area
     gtk_widget_set_size_request (drawarea, display_width+BORDER_WIDTH*2, display_height+BORDER_WIDTH*2);
 
     // Set drawable's background colour (to a light grey)
-    gdk_color_parse ("#e0e0e0", &colour);
-    gtk_widget_modify_bg (drawarea, GTK_STATE_NORMAL, &colour);
+    gdk_rgba_parse (&colour, "#e0e0e0");
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    gtk_widget_override_background_color (window, GTK_STATE_FLAG_NORMAL, &colour);
+    #pragma GCC diagnostic pop
+
+    // Put the drawing area in the window
+    gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET(drawarea));
 
     // Create a pixmap from the bitmap file
-    if ((pxbuf = gdk_pixbuf_new_from_file_at_size ((const char*)fname, draw_width, draw_height, &gtk_error)) == NULL) {
-        // If NULL returned, deisplay error information and return
+    if ((pxbuf = gdk_pixbuf_new_from_file_at_size ((const char*)fname, draw_width, draw_height, &gtk_error)) == NULL)
+    {
+        // If NULL returned, display error information and return
         fprintf(stderr, "ERROR: jpeg_display_bmp_file: %s : %d : %d : %s\n", fname, gtk_error->domain, 
                                                                                     gtk_error->code, 
                                                                                     gtk_error->message);
         return;
     }
 
-    // Put drawing area in the window
-    gtk_container_add (GTK_CONTAINER (window), drawarea);
-
-    // Register callback to "jpeg_on_drawarea_expose" whe drawing area has an expose-event
-    gtk_signal_connect (GTK_OBJECT(drawarea), "expose-event", GTK_SIGNAL_FUNC(jpeg_on_drawarea_expose), NULL);
+    // Register callback to "jpeg_on_drawarea_expose" when drawing area has a draw event
+    g_signal_connect (GTK_WIDGET(drawarea), "draw",         G_CALLBACK(jpeg_on_drawarea_expose), NULL);
 
     // Register callbacks for closing the window
-    gtk_signal_connect (GTK_OBJECT(window),   "delete_event", GTK_SIGNAL_FUNC(jpeg_delete_event),    NULL);
-    gtk_signal_connect (GTK_OBJECT(window),   "destroy",      GTK_SIGNAL_FUNC(jpeg_destroy),         NULL);
+    g_signal_connect (GTK_WIDGET(window),   "delete_event", G_CALLBACK(jpeg_delete_event),       NULL);
+    g_signal_connect (GTK_WIDGET(window),   "destroy",      G_CALLBACK(jpeg_destroy),            NULL);
 
     // Display the window
     gtk_widget_show_all (window);

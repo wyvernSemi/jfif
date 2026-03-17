@@ -203,7 +203,7 @@ int main (int argc, char **argv)
 
 #ifndef JPEG_NO_GRAPHICS
     // Display written bitmap in a window, if requested
-    if (display_RGB)
+    //if (display_RGB)
         jpeg_display_bmp_file (argc, argv, (unsigned char*)ofname, BMP_SWPEND32(bmp_hdr->i.biWidth), BMP_SWPEND32(bmp_hdr->i.biHeight));
 #endif        
 
