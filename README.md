@@ -49,7 +49,6 @@ If the bundle was unzipped into <tt>C:\Tools\gtk+</tt> then the <tt>makefile</tt
     
 or update the variable in the makefile itself. Modify your PATH to include c:\Tools\gtk+\bin (or to wherever you installed the package).
 
-For Microsoft Visual Studio (MSVC) 2019, a solution file (<tt>msvc/jpeg.sln</tt>) and associated files, are available for compilation, which works with the community version, as well as he subscriptions editions.
 
 Note that, to compile under MSVC or MinGW, GTK+ (including headers) must be installed (at <tt>C:\Tools\gtk+</tt>). If this is not the case, then <tt>JPEG_NO_GRAPHICS</tt> must be defined as a Preprocessor definition, and the <tt>-d</tt> option will not be available. 
 

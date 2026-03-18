@@ -1,6 +1,6 @@
 //=============================================================
-// 
-// Copyright (c) 2010-2014 Simon Southwell
+//
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 18th January 2010
@@ -20,16 +20,13 @@
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
 //
-// $Id: jpeg_dct_cos.h,v 1.1 2014-03-01 15:51:38 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jpeg_dct_cos.h,v $
-//
 //=============================================================
 
 #ifndef _JPEG_DCT_COS_
 #define _JPEG_DCT_COS_
 
 //-------------------------------------------------------------
-// The following definitions are for the floating point/slow 
+// The following definitions are for the floating point/slow
 // integer based iDCT functions
 
 #ifndef JPEG_DCT_INTEGER
@@ -37,18 +34,18 @@
 #define POSNUM0  0.3535533905932737     /* 1/sqrt(8) */
 #define POSNUM1  0.4903926402016152     /* 0.5 * cos (1/8 * 90 deg) */
 #define POSNUM2  0.4619397662556434     /* 0.5 * cos (2/8 * 90 deg) */
-#define POSNUM3  0.4157348061512726     /* 0.5 * cos (3/8 * 90 deg) */ 
-#define POSNUM4  0.3535533905932738     /* 0.5 * cos (4/8 * 90 deg) */ 
-#define POSNUM5  0.2777851165098011     /* 0.5 * cos (5/8 * 90 deg) */ 
-#define POSNUM6  0.1913417161825449     /* 0.5 * cos (6/8 * 90 deg) */ 
-#define POSNUM7  0.0975451610080642     /* 0.5 * cos (7/8 * 90 deg) */ 
+#define POSNUM3  0.4157348061512726     /* 0.5 * cos (3/8 * 90 deg) */
+#define POSNUM4  0.3535533905932738     /* 0.5 * cos (4/8 * 90 deg) */
+#define POSNUM5  0.2777851165098011     /* 0.5 * cos (5/8 * 90 deg) */
+#define POSNUM6  0.1913417161825449     /* 0.5 * cos (6/8 * 90 deg) */
+#define POSNUM7  0.0975451610080642     /* 0.5 * cos (7/8 * 90 deg) */
 
 #else
 
 // Fixed point u0.9 bits (i.e. round (512 * num))
 #define JPEG_DCT_INT_SCALE      9
 
-#define POSNUM0                 181     
+#define POSNUM0                 181
 #define POSNUM1                 251
 #define POSNUM2                 237
 #define POSNUM3                 213
@@ -92,7 +89,7 @@
 }
 
 //-------------------------------------------------------------
-// The following definitions are for the fast integer based 
+// The following definitions are for the fast integer based
 // iDCT functions
 
 #define DCTSIZE                 8

@@ -1,6 +1,6 @@
 //=============================================================
-// 
-// Copyright (c) 2010-2014 Simon Southwell
+//
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 18th January 2010
@@ -20,15 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
 //
-// $Id: jfif_local.h,v 1.4 2014-03-14 16:04:33 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jfif_local.h,v $
-//
 //=============================================================
 //
 // The code implements decoding of JFIF/JPEG data based on the
 // following standards (links supplied)
 //
-// JPEG Standard (JPEG ISO/IEC 10918-1, ITU-T Recommendation T.81): 
+// JPEG Standard (JPEG ISO/IEC 10918-1, ITU-T Recommendation T.81):
 //     http://www.w3.org/Graphics/JPEG/itu-t81.pdf
 //
 // JPEG File Interchange Format version 1.02
@@ -43,21 +40,21 @@
 // and can be defined in this file, or via the compile command
 // line.
 //
-// JPEG_DEBUG_MODE:             Enables verbose debug output to 
+// JPEG_DEBUG_MODE:             Enables verbose debug output to
 //                              stdout during execution.
 //
-// JPEG_DCT_INTEGER:            Makes the iDCT one of two integer 
-//                              based algorithms (see below). When 
+// JPEG_DCT_INTEGER:            Makes the iDCT one of two integer
+//                              based algorithms (see below). When
 //                              undefined, iDCT is floating point based.
 //
-// JPEG_FAST_INT_IDCT:          Compiles the fast (less accurate) integer 
-//                              iDCT. JPEG_DCT_INTEGER is forced to be 
+// JPEG_FAST_INT_IDCT:          Compiles the fast (less accurate) integer
+//                              iDCT. JPEG_DCT_INTEGER is forced to be
 //                              defined if this is defined.
 //
-// JPEG_IGNORE_SOS_TAIL_ERRORS: Suppresses errors associated with 
-//                              missing EOI markers. 
+// JPEG_IGNORE_SOS_TAIL_ERRORS: Suppresses errors associated with
+//                              missing EOI markers.
 //
-// JPEG_LIMITED_SUB_SAMPLING:   Turns off support for vertical 
+// JPEG_LIMITED_SUB_SAMPLING:   Turns off support for vertical
 //                              sub-sampling.
 //
 // JPEG_NO_WARNINGS:            Suppresses output of warnings
@@ -75,11 +72,11 @@
 
 #include "jfif.h"
 
-// Undefine before including jpeg_dct_cos.h to have 
+// Undefine before including jpeg_dct_cos.h to have
 // integer based DCT (or define in makefile)
 //#define JPEG_DCT_INTEGER
 
-// Use fast integer iDCT. 
+// Use fast integer iDCT.
 //#define JPEG_FAST_INT_IDCT
 
 //#include "jpeg_dct_cos.h"
@@ -90,8 +87,8 @@
 // Uncomment (or add to makefile) for debug output
 //#define JPEG_DEBUG_MODE
 
-// Uncomment (or add to makefile) to skip checking of Ss, Se, Ah 
-// and Al fields in SOS header, which aren't used as they should 
+// Uncomment (or add to makefile) to skip checking of Ss, Se, Ah
+// and Al fields in SOS header, which aren't used as they should
 // be constant for baseline DCT
 //#define JPEG_IGNORE_SOS_TAIL_ERRORS
 
@@ -101,7 +98,7 @@
 // Uncomment (or add to makefile) to suppress warnings (not recommended)
 //#define JPEG_NO_WARNINGS
 
-// If JPEG_FAST_INT_IDCT defined, then ensure that JPEG_DCT_INTEGER 
+// If JPEG_FAST_INT_IDCT defined, then ensure that JPEG_DCT_INTEGER
 // is also defined
 #ifdef  JPEG_FAST_INT_IDCT
 #ifndef JPEG_DCT_INTEGER
@@ -233,8 +230,8 @@
 #define JPEG_DQT_ELEMENTS               64
 #define JPEG_DQT_TABLE_SIZE             (JPEG_DQT_ELEMENTS+1)
 #define JPEG_MCU_ELEMENTS               64
-#define JPEG_BLOCK_DIMENSION            8 
-#define JPEG_MAX_MCU_BLOCKS             6 
+#define JPEG_BLOCK_DIMENSION            8
+#define JPEG_MAX_MCU_BLOCKS             6
 #define JPEG_MAX_QUANT_TABLES           4
 
 #define JPEG_SOS_NS_OFFSET              2
@@ -244,7 +241,7 @@
 
 #define JPEG_APP14_STR_OFFSET           2
 #define JPEG_APP14_ADOBE_STR            "Adobe"
-#define JPEG_APP14_ADOBE_STR_LEN        5 
+#define JPEG_APP14_ADOBE_STR_LEN        5
 #define JPEG_APP14_COLOUR_SPACE_OFFSET  13
 
 #define JPEG_DQT_OFFSET                 2
@@ -325,17 +322,17 @@
 #define JPEG_DEBUG_MAIN_EN              (1 << 24)
 
 //--------------------------------------------------------------------------
-// The following structure types are to be overlayed on top of byte memory, 
-// and so must be byte aligned. NB. The fields > 8 bits are MSB first. 
+// The following structure types are to be overlayed on top of byte memory,
+// and so must be byte aligned. NB. The fields > 8 bits are MSB first.
 // Byte reordering is required on LSB machines. The function bytereorder
 // defaults to LSB machine operation, but can be rewritten for MSB machines
 // (i.e. simply return input unaltered)
 
 #ifdef _WIN32
-#pragma pack (push, 1)                      
+#pragma pack (push, 1)
 #else
 #pragma pack (push)
-#pragma pack (1)                      
+#pragma pack (1)
 #endif
 
 
@@ -343,19 +340,19 @@
 
 // Frame header parameter type
 typedef struct {
-    uint8 Cid;                                  // Component ID (0-255)
-    uint8 HVi;                                  // Combined horizontal/vertical sampling factors (1-4) 
+    uint8_t Cid;                                  // Component ID (0-255)
+    uint8_t HVi;                                  // Combined horizontal/vertical sampling factors (1-4)
                                                 // (upper/lower nibbles)
-    uint8 Tq;                                   // Quantisation destination table (0-3)
+    uint8_t Tq;                                   // Quantisation destination table (0-3)
 } frame_params_t, *frame_params_pt;
 
 // Frame header type
 typedef struct {
-    uint16 length;                              // Length of frame header segment (including these 2 bytes) - LSB first
-    uint8  P;                                   // Sample precision (8 for baseline, 8 or 12 for extended)
-    uint16 Y;                                   // Number of lines (0 - 65535)
-    uint16 X;                                   // Number of samples per line (1- 65535)
-    uint8  Nf;                                  // Number of image components in frame (1-255)
+    uint16_t length;                              // Length of frame header segment (including these 2 bytes) - LSB first
+    uint8_t  P;                                   // Sample precision (8 for baseline, 8 or 12 for extended)
+    uint16_t Y;                                   // Number of lines (0 - 65535)
+    uint16_t X;                                   // Number of samples per line (1- 65535)
+    uint8_t  Nf;                                  // Number of image components in frame (1-255)
     frame_params_t Ci[4];                       // Variable number of frame-component specification parameters
 } frame_header_t, *frame_header_pt;
 
@@ -363,18 +360,18 @@ typedef struct {
 
 // Indivdual quantisation table (8 bits -- baseline DCT only)
 typedef struct {
-    uint8  PTq;                                 // Combined Precision/Table destination (upper/lower nibbles)
-    uint8  Qn[JPEG_DQT_ELEMENTS];               // Quantisation table data bytes 
+    uint8_t  PTq;                                 // Combined Precision/Table destination (upper/lower nibbles)
+    uint8_t  Qn[JPEG_DQT_ELEMENTS];               // Quantisation table data bytes
 } DQT_raw_t, *DQT_raw_pt;
 
 //--------------------------------------------------------------------------
-// The rest of the structures are not directly overlaying byte memory, and 
+// The rest of the structures are not directly overlaying byte memory, and
 // need not be packed. The wider fields need not be byte reordered (unless
 // stated for a particular field)
 
 // Internal DQT table, where Qn values are AAN prescaled values
 typedef struct {
-    uint8  PTq;                                 // Combined Precision/Table destination (upper/lower nibbles)
+    uint8_t  PTq;                                 // Combined Precision/Table destination (upper/lower nibbles)
     int    Qn[JPEG_DQT_ELEMENTS];               // Quantisation table data, scaled with AAN iDCT prescaler values
 } DQT_t, *DQT_pt;
 
@@ -385,28 +382,28 @@ typedef struct {
 // Last parameters of SOS header (variable position). Is mapped over buffer memory,
 // but constant for baseline DCT, so only used for format checking.
 typedef struct {
-    uint8 Ss;                                   // Start of spectral section (0 for baseline)
-    uint8 Se;                                   // End of spectral section (63 for baseline)
-    uint8 Ahl;                                  // Combined succesive approximation hi/lo bit positions 
+    uint8_t Ss;                                   // Start of spectral section (0 for baseline)
+    uint8_t Se;                                   // End of spectral section (63 for baseline)
+    uint8_t Ahl;                                  // Combined succesive approximation hi/lo bit positions
                                                 // (always 0 for baseline)
 } scan_tail_t, *scan_tail_pt;
 
-// Individual scan-component-specification parameter. Is mapped over 
+// Individual scan-component-specification parameter. Is mapped over
 // buffer memory.
 typedef struct {
-    uint8 Cs;                                   // Scan component selector (0-255)
-    uint8 Tda;                                  // Combined Huffman DC/AC table selector (upper/lower nibble) 
+    uint8_t Cs;                                   // Scan component selector (0-255)
+    uint8_t Tda;                                  // Combined Huffman DC/AC table selector (upper/lower nibble)
                                                 // (0-1 for baseline DCT)
 } scan_params_t, *scan_params_pt;
 
 // Start of scan header type
 typedef struct {
-    uint16 length;                              // Length of SOS segment (including the length bytes). 
+    uint16_t length;                              // Length of SOS segment (including the length bytes).
                                                 // Extracted from buffer
-    uint8  Ns;                                  // Number of image components in scan. Extracted from buffer
+    uint8_t  Ns;                                  // Number of image components in scan. Extracted from buffer
     scan_params_t* p_Ci;                        // Pointer to component specific parameter list in buffer
     scan_tail_t* p_tail;                        // Pointer to tail scan parameters in buffer
-    uint8 *p_ECS;
+    uint8_t *p_ECS;
 } scan_header_t, *scan_header_pt;
 
 // Huffman table type (see ITU.T81 sec B.2.4.2)
@@ -414,14 +411,14 @@ typedef struct {
 typedef struct {
     int Tc;                                     // Extracted table class (0 == DC, 1 == AC)
     int Th;                                     // Extracted table destination (0-1 for baseline DCT)
-    uint8 *Ln;                                  // Pointer to 16 element array of number of codes for (n+1)th 
+    uint8_t *Ln;                                  // Pointer to 16 element array of number of codes for (n+1)th
                                                 // bit width in buffer
-    uint8 *vmn_offset     [JPEG_DHT_MAX_BITS];  // Array of pointers to first value for (n+1)th bit width (NULL if none)
+    uint8_t *vmn_offset     [JPEG_DHT_MAX_BITS];  // Array of pointers to first value for (n+1)th bit width (NULL if none)
     int   row_break_codes [JPEG_DHT_MAX_BITS];  // Value of Huffman code after last mapped for (n+1)th bit width
 } DHT_offsets_t, *DHT_offsets_pt;
 
 //--------------------------------------------------------------------------
-// The following type definitions are internal to code, and not mapped to 
+// The following type definitions are internal to code, and not mapped to
 // the JPEG/JFIF standards
 //
 

@@ -1,6 +1,6 @@
 //=============================================================
-// 
-// Copyright (c) 2010-2014 Simon Southwell
+//
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 18th January 2010
@@ -20,9 +20,6 @@
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
 //
-// $Id: jfif_gtk.h,v 1.1 2014-03-01 15:51:37 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jfif_gtk.h,v $
-//
 //=============================================================
 
 #include <gtk/gtk.h>
@@ -30,17 +27,18 @@
 #ifndef _GTK_H_
 #define _GTK_H_
 
-#define MAX_DISPLAY_WIDTH  800
-#define MAX_DISPLAY_HEIGHT 600
+#define MAX_DISPLAY_WIDTH  1200
+#define MAX_DISPLAY_HEIGHT  900
 
-#define MIN_DISPLAY_WIDTH  200
-#define MIN_DISPLAY_HEIGHT 200
+#define MIN_DISPLAY_WIDTH   200
+#define MIN_DISPLAY_HEIGHT  200
 
 // Default is for no border
-#define BORDER_WIDTH 0
+#define BORDER_WIDTH          0
 
 #ifndef JPEG_NO_GRAPHICS
-extern void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *ibuf, int X, int Y);
+extern void jpeg_display_bmp_file (int argc, char *argv[], const unsigned char *ibuf, const int X, const int Y);
+extern void jpeg_display_img_data (int argc, char *argv[], const uint8_t       *data, const int X, const int Y);
 #endif
 
 #endif

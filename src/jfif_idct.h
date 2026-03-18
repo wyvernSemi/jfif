@@ -1,6 +1,6 @@
 //=============================================================
-// 
-// Copyright (c) 2014 Simon Southwell
+//
+// Copyright (c) 2014 - 2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 14th February 2014
@@ -19,9 +19,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
-//
-// $Id: jfif_idct.h,v 1.1 2014-03-01 15:51:38 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jfif_idct.h,v $
 //
 //=============================================================
 
@@ -65,7 +62,7 @@ private:
 
     static const jpeg_dct_t C[JPEG_BLOCK_DIMENSION][JPEG_BLOCK_DIMENSION];
 
-    void jpeg_idct_1d(int *data0, int *data1, int *data2, int *data3, 
+    void jpeg_idct_1d(int *data0, int *data1, int *data2, int *data3,
                       int *data4, int *data5, int *data6, int *data7);
 
 };

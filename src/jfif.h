@@ -1,6 +1,6 @@
 //=============================================================
-// 
-// Copyright (c) 2010-2014 Simon Southwell
+//
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
 // Date: 18th January 2010
@@ -20,15 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
 //
-// $Id: jfif.h,v 1.1 2014-03-01 15:51:37 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/jfif.h,v $
-//
 //=============================================================
 //
 // The code implements decoding of JFIF/JPEG data based on the
 // following standards (links supplied)
 //
-// JPEG Standard (JPEG ISO/IEC 10918-1 ITU-T Recommendation T.81): 
+// JPEG Standard (JPEG ISO/IEC 10918-1 ITU-T Recommendation T.81):
 //     http://www.w3.org/Graphics/JPEG/itu-t81.pdf
 //
 // JPEG File Interchange Format version 1.02
@@ -38,6 +35,8 @@
 // to the main JFIF/JPEG decode routine jpeg_process_jfif().
 //
 //=============================================================
+
+#include <stdint.h>
 
 #ifndef _JFIF_H_
 #define _JFIF_H_
@@ -59,26 +58,18 @@
 #endif
 
 //-------------------------------------------------------------
-// Define the basic types
-
-typedef unsigned char                uint8;
-typedef unsigned short               uint16;
-typedef unsigned int                 uint32;
-typedef unsigned long long           uint64;
-
-//-------------------------------------------------------------
-// Exported function prototype(s) (see function main comments 
+// Exported function prototype(s) (see function main comments
 // for detailed description)
 
-// Takes a byte buffer (ibuf) containing a JFIF/JPEG image, and 
-// updates a pointer (obuf) to point to a 24 bit window bitmap. 
+// Takes a byte buffer (ibuf) containing a JFIF/JPEG image, and
+// updates a pointer (obuf) to point to a 24 bit window bitmap.
 // Return value is one of the six values defined above. If other
 // than JPEG_NO_ERROR, the obuf pointer is undefined.
 
 #ifdef __cplusplus
-extern "C" int jpeg_process_jfif_c (uint8 *ibuf, uint8 **obuf, int debug_enable);
+extern "C" int jpeg_process_jfif_c (uint8_t *ibuf, uint8_t **obuf, uint8_t **rawbuf, int debug_enable);
 #else
-extern     int jpeg_process_jfif_c (uint8 *ibuf, uint8 **obuf, int debug_enable);
+extern     int jpeg_process_jfif_c (uint8_t *ibuf, uint8_t **obuf, uint8_t **rawbuf, int debug_enable);
 #endif
 
 #endif

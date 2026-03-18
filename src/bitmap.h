@@ -1,10 +1,10 @@
 //=============================================================
-//                                                               
-// Copyright (c) 2010-2014 Simon Southwell
+//
+// Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
-//                                                               
+//
 // Date: 2nd February 2010
-//                                                               
+//
 // This file is part of JFIF.
 //
 // JFIF is free software: you can redistribute it and/or modify
@@ -20,10 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with JFIF. If not, see <http://www.gnu.org/licenses/>.
 //
-// $Id: bitmap.h,v 1.1 2014-03-01 15:51:37 simon Exp $
-// $Source: /home/simon/CVS/src/HDL/jfif/sw/jpeg_cpp/src/bitmap.h,v $
-//
 //=============================================================
+
+#include <stdint.h>
 
 #ifdef _WIN32
 #define __BYTE_ORDER __LITTLE_ENDIAN
@@ -96,34 +95,34 @@
 // Set packing of structures to 1 byte boundaries so that headers
 // are aligned correctly
 #ifdef _WIN32
-#pragma pack (push, 1)                      
+#pragma pack (push, 1)
 #else
 #pragma pack (push)
-#pragma pack (1)                      
+#pragma pack (1)
 #endif
 
 // Bitmap format header structure
 typedef struct {
     char     bfType[2];
-    uint32   bfSize;
+    uint32_t   bfSize;
     char     bfRes[4];
-    uint32   bfOffBits;
+    uint32_t   bfOffBits;
 
 } bmfh_t, *pbmfh_t;
 
 // Bitmap information table structure
 typedef struct {
-    uint32 biSize;
-    uint32 biWidth;
-    uint32 biHeight;
-    uint16 biPlanes;
-    uint16 biBitCount;
-    uint32 biCompression;
-    uint32 biSizeImage;
-    uint32 biXPxlsPerMeter;
-    uint32 biYPxlsPerMeter;
-    uint32 biClrUsed;
-    uint32 biClrImportant;
+    uint32_t biSize;
+    uint32_t biWidth;
+    uint32_t biHeight;
+    uint16_t biPlanes;
+    uint16_t biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    uint32_t biXPxlsPerMeter;
+    uint32_t biYPxlsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
 } bmih_t, *pbmih_t;
 
 // Combined format header/information table header
@@ -134,13 +133,13 @@ typedef struct {
 
 // Bitmap RGB Quad structure
 typedef struct {
-    uint8 Blue;
-    uint8 Green;
-    uint8 Red;
-    uint8 rgbReserved;
+    uint8_t Blue;
+    uint8_t Green;
+    uint8_t Red;
+    uint8_t rgbReserved;
 } rgbquad_t, *prgbquad_t;
 
 // Revert to default packing
-#pragma pack (pop)                      
+#pragma pack (pop)
 
 #endif

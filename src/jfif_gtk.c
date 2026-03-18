@@ -1,5 +1,5 @@
 //=============================================================
-// 
+//
 // Copyright (c) 2010-2026 Simon Southwell
 // All rights reserved.
 //
@@ -29,13 +29,13 @@
 
 #ifndef JPEG_NO_GRAPHICS
 
-static int display_width  = MAX_DISPLAY_WIDTH;
-static int display_height = MAX_DISPLAY_HEIGHT;
+static int        display_width  = MAX_DISPLAY_WIDTH;
+static int        display_height = MAX_DISPLAY_HEIGHT;
+                  
+static int        image_width;
+static int        image_height;
 
-static int image_width;
-static int image_height;
-
-static GdkPixbuf *pxbuf;
+static GdkPixbuf* pxbuf;
 
 //-------------------------------------------------------------
 // jpeg_on_drawarea_expose()
@@ -106,35 +106,24 @@ static void jpeg_destroy (GtkWidget *widget, gpointer data)
 }
 
 //-------------------------------------------------------------
-// jpeg_display_bmp_file()
+// jpeg_calc_dimensions()
 //
 // Description:
 //
-// Main routine called by application to display a bitmap file
-// in a window. The bitmap will be scaled if either dimension
-// is larger than given maximums. The routine does not decode
-// the X and Y dimensions from the bitmap file, but expects
-// them to be supplied as parameters from the calling application.
+// Calculate the dimensions of the image window
 //
-// Parameters:
-//    argc:     number of arguments in argv parameter
-//    argv:     passed on GTK/GDK parameters from command line (if any)
-//    fname:    name of bitmap to display
-//    X:        width dimension of bitmap image
-//    Y:        height dimension of bitmap image
+// Parameters
 //
-// Return Value:
-//    NONE
+//     X:           image width dimension input
+//     Y:           image height dimension input
+//     draw_width:  window width output
+//     draw_height: window height output
 //
-void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X, int Y)
+//-------------------------------------------------------------
+
+void jpeg_calc_dimensions(const int X, const int Y, int *draw_width, int *draw_height)
 {
-    GtkWidget *window, *drawarea;
-    int draw_height, draw_width;
-
-    GError *gtk_error=NULL;
-    GdkRGBA colour;
-
-    // Export the arguments for callback visibility
+        // Export the arguments for callback visibility
     image_width  = X;
     image_height = Y;
 
@@ -163,8 +152,31 @@ void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X,
 
     // If image dimensions are less than the display, use the image dimension for the pixmap scaling
     // (so as not to stretch)
-    draw_height = (image_height < display_height) ? image_height :  display_height;
-    draw_width  = (image_width  < display_width)  ? image_width  :  display_width;
+    *draw_height = (image_height < display_height) ? image_height :  display_height;
+    *draw_width  = (image_width  < display_width)  ? image_width  :  display_width;
+}
+
+//-------------------------------------------------------------
+// jpeg_window_setup()
+//
+// Description:
+//
+// Do window initialisation and setup, and connect callbacks
+//
+// Parameters: 
+//    argc: The command line number of arguments
+//    argv: The command line arguments
+//
+// Return value:
+//
+//    A pointer to the newly created window
+//
+//-------------------------------------------------------------
+
+GtkWidget* jpeg_window_setup(int argc, char** argv)
+{
+    GtkWidget *window, *drawarea;
+    GdkRGBA colour;
 
     // Initialise GTK
     gtk_init (&argc, &argv);
@@ -189,28 +201,133 @@ void jpeg_display_bmp_file (int argc, char *argv[], unsigned char *fname, int X,
     // Put the drawing area in the window
     gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET(drawarea));
 
-    // Create a pixmap from the bitmap file
-    if ((pxbuf = gdk_pixbuf_new_from_file_at_size ((const char*)fname, draw_width, draw_height, &gtk_error)) == NULL)
-    {
-        // If NULL returned, display error information and return
-        fprintf(stderr, "ERROR: jpeg_display_bmp_file: %s : %d : %d : %s\n", fname, gtk_error->domain, 
-                                                                                    gtk_error->code, 
-                                                                                    gtk_error->message);
-        return;
-    }
-
     // Register callback to "jpeg_on_drawarea_expose" when drawing area has a draw event
     g_signal_connect (GTK_WIDGET(drawarea), "draw",         G_CALLBACK(jpeg_on_drawarea_expose), NULL);
 
     // Register callbacks for closing the window
     g_signal_connect (GTK_WIDGET(window),   "delete_event", G_CALLBACK(jpeg_delete_event),       NULL);
     g_signal_connect (GTK_WIDGET(window),   "destroy",      G_CALLBACK(jpeg_destroy),            NULL);
+    
+    return window;
+}
 
+//-------------------------------------------------------------
+// jpeg_display_window()
+//
+// Description
+//
+// Makes window visible and starts the event loop. Will
+// not return until the window is closed.
+//
+//-------------------------------------------------------------
+void jpeg_display_window(GtkWidget* window)
+{
     // Display the window
     gtk_widget_show_all (window);
 
     // Process events
     gtk_main ();
+}
+
+//-------------------------------------------------------------
+// jpeg_display_bmp_file()
+//
+// Description:
+//
+// Top level routine called by application to display a bitmap file
+// in a window. The bitmap will be scaled if either dimension
+// is larger than given maximums. The routine does not decode
+// the X and Y dimensions from the bitmap file, but expects
+// them to be supplied as parameters from the calling application.
+//
+// Parameters:
+//    argc:     number of arguments in argv parameter
+//    argv:     passed on GTK/GDK parameters from command line (if any)
+//    fname:    name of bitmap to display
+//    X:        width dimension of bitmap image
+//    Y:        height dimension of bitmap image
+//
+// Return Value:
+//    NONE
+//
+void jpeg_display_bmp_file (int argc, char *argv[], const unsigned char *fname, const int X, const int Y)
+{
+    GtkWidget *window;
+    int draw_height, draw_width;
+
+    GError *gtk_error=NULL;
+
+    // Calculate the window size from the image size
+    jpeg_calc_dimensions(X, Y, &draw_width, &draw_height);
+
+    // Setup the window
+    window = jpeg_window_setup(argc, argv);
+    
+    // Create a pixmap from the bitmap file
+    if ((pxbuf = gdk_pixbuf_new_from_file_at_size ((const char*)fname, draw_width, draw_height, &gtk_error)) == NULL)
+    {
+        // If NULL returned, display error information and return
+        fprintf(stderr, "ERROR: jpeg_display_bmp_file: %s : %d : %d : %s\n", fname, gtk_error->domain,
+                                                                                    gtk_error->code,
+                                                                                    gtk_error->message);
+        return;
+    }
+    
+    // Display window, running the main loop
+    jpeg_display_window(window);
+
+}
+
+//-------------------------------------------------------------
+// jpeg_display_img_data()
+//
+// Description:
+//
+// Top level routine called by application to display image data
+// in a window. The bitmap will be scaled if either dimension
+// is larger than given maximums. The routine does not decode
+// the X and Y dimensions from the bitmap file, but expects
+// them to be supplied as parameters from the calling application.
+//
+// Parameters:
+//    argc:     number of arguments in argv parameter
+//    argv:     passed on GTK/GDK parameters from command line (if any)
+//    data:     pointer to image data to display
+//    X:        width dimension of bitmap image
+//    Y:        height dimension of bitmap image
+//
+// Return Value:
+//    NONE
+//
+void jpeg_display_img_data (int argc, char *argv[], const uint8_t *data, const int X, const int Y)
+{
+    GtkWidget *window;
+    int draw_height, draw_width;
+    
+    // Calculate the window size from the image size
+    jpeg_calc_dimensions(X, Y, &draw_width, &draw_height);
+
+    // Setup the window
+    window = jpeg_window_setup(argc, argv);
+    
+    // Create a pixmap from the image data
+    if ((pxbuf = gdk_pixbuf_new_from_data ((const guchar*)data,
+                                           GDK_COLORSPACE_RGB,
+                                           false,
+                                           8,
+                                           draw_width,
+                                           draw_height,
+                                           X*3,
+                                           NULL,
+                                           NULL)) == NULL)
+    {
+        // If NULL returned, display error and return
+        fprintf(stderr, "ERROR: jpeg_display_img_data: failed to create pixbuf\n");
+        return;
+    }
+    
+    // Display window, running the main loop
+    jpeg_display_window(window);
 
 }
 
